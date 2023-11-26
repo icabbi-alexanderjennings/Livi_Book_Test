@@ -1,0 +1,11 @@
+{% extends "books/base.html" %}
+
+{% block content %}
+    <p>Edit: {{ author.first_name }} {{ author.last_name }}</p>
+
+    <form action="{% url 'books:author_edit' author.id %}" method='post'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button name="submit">Save Changes</button>
+    </form>
+{% endblock content %}

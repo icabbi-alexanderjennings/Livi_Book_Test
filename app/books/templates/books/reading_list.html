@@ -1,0 +1,30 @@
+{% extends "books/base.html" %}
+
+{% block content %}
+    <h3>Your Reading List</h3>
+
+    {% if reading_list %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in reading_list %}
+                <tr>
+                    <th scope="row">{{ item.id}}</th>
+                    <td>{{ item.book }}</td>
+                    <td><a class="btn btn-danger" href="{% url 'books:reading_list_delete' item.book.id %}" role="button">Remove</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>There are no books in your reading list!</p>
+        <p>Visit the books page to add books to your list</p>
+    {% endif%}
+
+{% endblock content %}

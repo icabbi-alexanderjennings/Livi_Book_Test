@@ -1,0 +1,63 @@
+{% load django_bootstrap5 %}
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewpoint" content="width=device-width, initial-scale=1,shrink-to-fit=no">
+        <title>Book Manager</title>
+
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+
+        <style>
+            .navbar {
+                background-color: #b80000;
+                margin-bottom: 10px;
+            }
+
+            .navbar-brand {
+                color: #fff;
+            }
+
+            .nav-link {
+                color: #fff;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'books:index' %}">Book Manager</a>
+                    <ul class="navbar-nav me-auto flex-row flex-wrap">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'books:authors' %}">Authors</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'books:books' %}">Books</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'books:reading_list' %}">Personal Reading List</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav flex-row flex-wrap ms-md-auto ">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'users:logout' %}">{{ user.username }}, Log Out</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'users:login' %}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'users:registration' %}">Create new user</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+            </div>
+        </nav>
+
+        <div class="container-xl">
+        {% block content %}{% endblock content %}
+        </div>
+    </body>

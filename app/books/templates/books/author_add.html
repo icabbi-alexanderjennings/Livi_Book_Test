@@ -1,0 +1,11 @@
+{% extends "books/base.html" %}
+
+{% block content %}
+    <p>Add a new author</p>
+
+    <form action="{% url 'books:author_add' %}" method='post'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button name="submit">Add Author</button>
+    </form>
+{% endblock content %}

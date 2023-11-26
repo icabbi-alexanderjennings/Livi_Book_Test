@@ -1,0 +1,47 @@
+{% extends "books/base.html" %}
+
+{% block content %}
+    <h3>Books</h3>
+
+    <a class="btn btn-primary" href="{% url 'books:book_add' %}" role="button">Add New Book</a>
+
+    {% if books %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Date Published</th>
+                    <th scope="col">ISBN</th>
+                    <th scope="col">Description</th>
+                    {% if user.is_authenticated %}
+                        <th scope="col">Action</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+            {% for book in books %}
+                <tr>
+                    <th scope="row">{{ book.id}}</th>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.date_published }}</td>
+                    <td>{{ book.isbn }}</td>
+                    <td>{{ book.description }}</td>
+                    {% if user.is_authenticated %}
+                    <td>
+                        <a class="btn btn-success" href="{% url 'books:reading_list_add' book.id %}" role="button">Read Later</a>
+                        <a class="btn btn-warning" href="{% url 'books:book_edit' book.id %}" role="button">Edit</a>
+                        <a class="btn btn-danger" href="{% url 'books:book_delete' book.id %}" role="button">Delete</a>
+                    </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>There are no books in the database!</p>
+    {% endif%}
+
+{% endblock content %}
