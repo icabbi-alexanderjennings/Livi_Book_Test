@@ -3,13 +3,24 @@
 {% block content %}
     <h3>Books</h3>
 
-    <a class="btn btn-primary" href="{% url 'books:book_add' %}" role="button">Add New Book</a>
+    <div class="container">
+        <div class="row">
+            <div class="col col-xl-8">
+                <a class="btn btn-primary" href="{% url 'books:book_add' %}" role="button">Add New Book</a>
+            </div>
+            <div class="col col-sm-4">
+                <form class="d-flex" role="search" action="{% url 'books:book_search' %}" method='get'>
+                    <input class="form-control me-2" type="search" name="search" placeholder="Search Books">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     {% if books %}
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
                     <th scope="col">Title</th>
                     <th scope="col">Author</th>
                     <th scope="col">Date Published</th>
@@ -23,7 +34,6 @@
             <tbody>
             {% for book in books %}
                 <tr>
-                    <th scope="row">{{ book.id}}</th>
                     <td>{{ book.title }}</td>
                     <td>{{ book.author }}</td>
                     <td>{{ book.date_published }}</td>
@@ -41,7 +51,7 @@
             </tbody>
         </table>
     {% else %}
-        <p>There are no books in the database!</p>
+        <p>No books were found!</p>
     {% endif%}
 
 {% endblock content %}

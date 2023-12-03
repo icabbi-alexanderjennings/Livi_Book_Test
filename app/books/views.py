@@ -9,7 +9,7 @@ def index(request):
 # Code for handling Authors
 def author_list(request):
     """ Show all the authors """
-    authors = Author.objects.order_by('last_name')
+    authors = Author.objects.order_by('name')
     context = {'authors': authors}
     return render(request, 'books/authors.html', context)
 
@@ -20,6 +20,15 @@ def author_single(request, author_id):
     context = {'author': author, 'books': books}
     return render(request, 'books/author.html', context)
 
+def author_search(request):
+    """ Find Authors """
+    if 'search' in request.GET:
+        authors = Author.objects.all().filter(name__contains=request.GET['search']).order_by('name')
+    else:
+        authors = Author.objects.order_by('name')
+    context = {'authors': authors}
+    return render(request, 'books/authors.html', context)
+
 @login_required
 def author_add(request):
     """ Add a new author to the database """
@@ -29,7 +38,10 @@ def author_add(request):
         form = AuthorForm(data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect('books:authors')
+            if "author_add" in request.META['HTTP_REFERER']:
+                return redirect('books:authors')
+            else:
+                return redirect(request.META['HTTP_REFERER'])
 
     context = {'form': form}
     return render(request, 'books/author_add.html', context)
@@ -60,22 +72,32 @@ def author_delete(request, author_id):
 # Code for handling Books
 def book_list(request):
     """ Show all the books """
-    books = Book.objects.order_by('date_published')
+    books = Book.objects.order_by('title')
+    context = {'books': books}
+    return render(request, 'books/books.html', context)
+
+def book_search(request):
+    """ Find books """
+    if 'search' in request.GET:
+        books = Book.objects.all().filter(title__contains=request.GET['search']).order_by('title')
+    else:
+        books = Book.objects.order_by('title')
     context = {'books': books}
     return render(request, 'books/books.html', context)
 
 @login_required
 def book_add(request):
-    """ Add a new author to the database """
+    """ Add a new book to the database """
+    author_form = AuthorForm()
     if request.method != 'POST':
-        form = BookForm()
-    else:
-        form = BookForm(data=request.POST)
-        if form.is_valid():
-            form.save()
+        book_form = BookForm()
+    else: 
+        book_form = BookForm(data=request.POST)
+        if book_form.is_valid():
+            book_form.save()
             return redirect('books:books')
 
-    context = {'form': form}
+    context = {'author_form': author_form, 'book_form': book_form}
     return render(request, 'books/book_add.html', context)
 
 @login_required
@@ -106,6 +128,16 @@ def book_delete(request, book_id):
 def reading_list(request):
     """ Show the users personal reading list """
     reading_list = Reading_List.objects.filter(owner=request.user).order_by('date_added')
+    context = {'reading_list': reading_list}
+    return render(request, 'books/reading_list.html', context)
+
+@login_required
+def reading_list_search(request):
+    """ Find books in reading list """
+    if 'search' in request.GET:
+        reading_list = Reading_List.objects.filter(owner=request.user).filter(book__title__contains=request.GET['search']).order_by('book__title')
+    else:
+        reading_list = Reading_List.objects.filter(owner=request.user).order_by('date_added')
     context = {'reading_list': reading_list}
     return render(request, 'books/reading_list.html', context)
 

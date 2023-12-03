@@ -1,11 +1,14 @@
 {% extends "books/base.html" %}
 
 {% block content %}
-    <p>Edit: {{ author.first_name }} {{ author.last_name }}</p>
+    <h3>Edit: {{ author.name }}</h3>
 
     <form action="{% url 'books:author_edit' author.id %}" method='post'>
         {% csrf_token %}
-        {{ form.as_p }}
-        <button name="submit">Save Changes</button>
+        {% for item in form %}
+            <label>{{ item.label }}:</label>
+            <p>{{ item }}</p>
+        {% endfor %}
+        <button name="submit" class="btn btn-primary">Save Changes</button>
     </form>
 {% endblock content %}

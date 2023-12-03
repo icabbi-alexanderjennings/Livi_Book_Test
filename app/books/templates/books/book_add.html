@@ -1,11 +1,42 @@
 {% extends "books/base.html" %}
 
 {% block content %}
-    <p>Add a new book</p>
+    <h3>Add a new book</h3>
 
-    <form action="{% url 'books:book_add' %}" method='post'>
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button name="submit">Add Book</button>
-    </form>
+    {% if book_form.errors %}
+      {{ book_form.errors }}
+    {% endif %}
+
+    <div class="modal" id="authorModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Add New Author</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="{% url 'books:author_add' %}" method='post'>
+                  {% csrf_token %}
+                  {{ author_form.as_p }}
+                  <button name="submit" class="btn btn-primary">Add Author</button>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#authorModal">
+        Add New Author
+    </button>
+
+    <div class="item-form">
+        <form action="{% url 'books:book_add' %}" method='post'>
+            {% csrf_token %}
+            {% for item in book_form %}
+                <label>{{ item.label }}:</label>
+                <p>{{ item }}</p>
+            {% endfor %}
+            <button name="submit" class="btn btn-primary">Add Book</button>
+        </form>
+    </div>
 {% endblock content %}

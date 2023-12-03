@@ -1,13 +1,12 @@
 {% extends "books/base.html" %}
 
 {% block content %}
-    <h3>Author: {{ author.first_name }} {{ author.last_name }}</h3>
+    <h3>Author: {{ author.name }}</h3>
 
     {% if books %}
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
                     <th scope="col">Title</th>
                     <th scope="col">Author</th>
                     <th scope="col">Date Published</th>
@@ -21,7 +20,6 @@
             <tbody>
             {% for book in books %}
                 <tr>
-                    <th scope="row">{{ book.id}}</th>
                     <td>{{ book.title }}</td>
                     <td>{{ book.author }}</td>
                     <td>{{ book.date_published }}</td>
